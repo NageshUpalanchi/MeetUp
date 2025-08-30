@@ -10,8 +10,9 @@ export default function Home() {
     const s = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:8081', { query: { userId: 'u1' } });
     setSocket(s);
     s.emit('join_conv', 'conv1');
-    s.on('new_message', (m: any) => setMessages(prev => [...prev, m]));
-    return () => s.close();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   const send = () => {
