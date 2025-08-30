@@ -22,7 +22,7 @@ jobs:
         with:
           context: ./services/chat-gateway
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:${{ github.run_number }}-${{ github.run_attempt }}
   
   Build_api-gateway_image:
     needs: Build_chat-gateway_image
@@ -43,7 +43,7 @@ jobs:
         with:
           context: ./services/api-gateway
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.run_number }}-${{ github.run_attempt }}
   
   Build_frontend_image:
     needs: Build_api-gateway_image
@@ -64,4 +64,4 @@ jobs:
         with:
           context: ./web/nextjs
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:latest,${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:latest,${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:${{ github.run_number }}-${{ github.run_attempt }}
