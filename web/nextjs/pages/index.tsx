@@ -7,27 +7,115 @@ export default function Home() {
   const [text, setText] = useState('');
 
   useEffect(() => {
-  const s = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:8081', { query: { userId: 'u1' } });
-  setSocket(s);
-  s.emit('join_conv', 'conv1');
-  return () => {
-    s.disconnect();
-  };
-}, []);
+    const s = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:8081', { query: { userId: 'u1' } });
+    setSocket(s);
+    s.emit('join_conv', 'conv1');
+    return () => {
+      s.disconnect();
+    };
+  }, []);
 
   const send = () => {
-    socket.emit('send_message', { conversationId: 'conv1', text });
-    setText('');
-  }
+    if (text.trim()) {
+      socket.emit('send_message', { conversationId: 'conv1', text });
+      setText('');
+    }
+  };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Meetup Chat — Testing-Professional-Look</h1>
-      <div style={{ height: 300, overflow: 'auto', border: '1px solid #ccc', padding: 8 }}>
-        {messages.map((m, i) => <div key={i}>{m.text || JSON.stringify(m)}</div>)}
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Segoe UI, Arial, sans-serif',
+      }}
+    >
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: 16,
+          boxShadow: '0 8px 32px rgba(44, 62, 80, 0.15)',
+          padding: 32,
+          width: 400,
+          maxWidth: '90vw',
+        }}
+      >
+        <h1 style={{ textAlign: 'center', color: '#2575fc', marginBottom: 24 }}>
+          Meetup Chat
+        </h1>
+        <div
+          style={{
+            height: 260,
+            overflow: 'auto',
+            borderRadius: 8,
+            border: '1px solid #e0e0e0',
+            background: '#f7f9fa',
+            padding: 12,
+            marginBottom: 16,
+          }}
+        >
+          {messages.length === 0 ? (
+            <div style={{ color: '#aaa', textAlign: 'center', marginTop: 80 }}>
+              No messages yet.
+            </div>
+          ) : (
+            messages.map((m, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#e3f0ff',
+                  color: '#2575fc',
+                  padding: '8px 12px',
+                  borderRadius: 6,
+                  marginBottom: 8,
+                  wordBreak: 'break-word',
+                  fontSize: 15,
+                }}
+              >
+                {m.text || JSON.stringify(m)}
+              </div>
+            ))
+          )}
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input
+            value={text}
+            onChange={e => setText(e.target.value)}
+            placeholder="Type your message..."
+            style={{
+              flex: 1,
+              padding: '10px 12px',
+              borderRadius: 6,
+              border: '1px solid #d0d0d0',
+              fontSize: 15,
+              outline: 'none',
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') send();
+            }}
+          />
+          <button
+            onClick={send}
+            style={{
+              background: 'linear-gradient(90deg, #2575fc 0%, #6a11cb 100%)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 6,
+              padding: '10px 18px',
+              fontWeight: 600,
+              fontSize: 15,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(44, 62, 80, 0.08)',
+              transition: 'background 0.2s',
+            }}
+          >
+            Send
+          </button>
+        </div>
       </div>
-      <input value={text} onChange={e => setText(e.target.value)} />
-      <button onClick={send}>Send</button>
     </div>
   );
 }
