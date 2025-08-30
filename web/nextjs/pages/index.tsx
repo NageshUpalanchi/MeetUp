@@ -15,10 +15,11 @@ export default function Home() {
     };
   }, []);
 
-  const send = () => {
+  const send = async () => {
     if (text.trim()) {
-      socket.emit('send_message', { conversationId: 'conv1', text });
-      setMessages(prev => [...prev, { text }]); // Add this line
+      setMessages(prev => [...prev, { text }]); // Show user message
+      const reply = await askChatGPT(text);     // Get ChatGPT response
+      setMessages(prev => [...prev, { text: reply }]); // Show ChatGPT reply
       setText('');
     }
   };
