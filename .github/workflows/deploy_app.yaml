@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Deploy on EC2 instance
 
 on:
   workflow_dispatch:  # manual trigger
