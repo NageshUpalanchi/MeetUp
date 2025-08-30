@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Meetup Chat — Application</h1>
+      <h1>Meetup Chat — Testing</h1>
       <div style={{ height: 300, overflow: 'auto', border: '1px solid #ccc', padding: 8 }}>
         {messages.map((m, i) => <div key={i}>{m.text || JSON.stringify(m)}</div>)}
       </div>
