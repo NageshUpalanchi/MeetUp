@@ -7,13 +7,13 @@ export default function Home() {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    const s = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:8081', { query: { userId: 'u1' } });
-    setSocket(s);
-    s.emit('join_conv', 'conv1');
-    return () => {
-      s.disconnect();
-    };
-  }, []);
+  const s = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:8081', { query: { userId: 'u1' } });
+  setSocket(s);
+  s.emit('join_conv', 'conv1');
+  return () => {
+    s.disconnect();
+  };
+}, []);
 
   const send = () => {
     socket.emit('send_message', { conversationId: 'conv1', text });
