@@ -1,0 +1,39 @@
+name: Build & Push Docker Image to DockerHub
+
+on:
+  workflow_dispatch:   # manual trigger
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push chat-gateway image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/chat-gateway
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:${{ github.sha }}
+
+      - name: Build and push api-gateway image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./services/api-gateway
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.sha }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./web/nextjs
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:latest,${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:${{ github.sha }}
