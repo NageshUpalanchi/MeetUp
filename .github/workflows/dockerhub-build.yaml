@@ -4,7 +4,7 @@ on:
   workflow_dispatch:   # manual trigger
 
 jobs:
-  docker:
+  Build_chat-gateway_image:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +23,20 @@ jobs:
           context: ./services/chat-gateway
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/chat-gateway:${{ github.sha }}
+  
+  Build_api-gateway_image:
+    needs: Build_chat-gateway_image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push api-gateway image
         uses: docker/build-push-action@v4
@@ -30,6 +44,20 @@ jobs:
           context: ./services/api-gateway
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest,${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.sha }}
+  
+  Build_frontend_image:
+    needs: Build_api-gateway_image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v4
