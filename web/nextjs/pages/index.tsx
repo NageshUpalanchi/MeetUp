@@ -78,7 +78,7 @@ export default function Home() {
         >
           {messages.length === 0 ? (
             <div style={{ color: '#aaa', textAlign: 'center', marginTop: 80 }}>
-              No messages yet.
+              No messages yet 1.
             </div>
           ) : (
             messages.map((m, i) => (
