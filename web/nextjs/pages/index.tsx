@@ -18,6 +18,7 @@ export default function Home() {
   const send = () => {
     if (text.trim()) {
       socket.emit('send_message', { conversationId: 'conv1', text });
+      setMessages(prev => [...prev, { text }]); // Add this line
       setText('');
     }
   };
