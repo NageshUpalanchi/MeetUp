@@ -16,5 +16,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/meetup-web:latest
-            sudo docker stop myapp || true && docker rm myapp || true
             sudo docker run -d --name myapp -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/meetup-web:latest
