@@ -15,5 +15,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/meetup-web:latest
+            # Find and kill any container using port 3000
+            CONTAINER_ID=$(docker ps --filter "publish=3000" --format "{{.ID}}")
+            if [ ! -z "$CONTAINER_ID" ]; then
+              docker stop $CONTAINER_ID
+              docker rm $CONTAINER_ID
+            fi
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:latest
             docker run -d --name myapp-${{ github.run_number }}-${{ github.run_attempt }} -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/meetup-web:latest
