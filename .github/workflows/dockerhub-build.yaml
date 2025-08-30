@@ -7,6 +7,8 @@ jobs:
   Build_frontend_image:
     #needs: Build_api-gateway_image
     runs-on: self-hosted
+    env:
+      NEXT_PUBLIC_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # inject at build time
 
     steps:
       - name: Checkout repository
