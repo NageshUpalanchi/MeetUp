@@ -30,7 +30,7 @@ export default function Home() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+        'Authorization': `Bearer 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`,
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
