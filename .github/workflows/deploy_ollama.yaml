@@ -1,0 +1,24 @@
+name: Deploy Ollama on EC2 instance
+
+on:
+  workflow_dispatch:  # manual trigger
+
+jobs:
+  Deploy_app:
+    runs-on: ubuntu
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Find and kill any container using port 11434
+            CONTAINER_ID=$(docker ps --filter "publish=11434" --format "{{.ID}}")
+            if [ ! -z "$CONTAINER_ID" ]; then
+              docker stop $CONTAINER_ID
+              docker rm $CONTAINER_ID
+            fi
+            docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
