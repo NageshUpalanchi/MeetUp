@@ -16,9 +16,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Find and kill any container using port 11434
-            CONTAINER_ID=$(docker ps --filter "publish=11434" --format "{{.ID}}")
-            if [ ! -z "$CONTAINER_ID" ]; then
-              docker stop $CONTAINER_ID
-              docker rm $CONTAINER_ID
-            fi
+            # CONTAINER_ID=$(docker ps --filter "publish=11434" --format "{{.ID}}")
+            # if [ ! -z "$CONTAINER_ID" ]; then
+            #   docker stop $CONTAINER_ID
+            #   docker rm $CONTAINER_ID
+            # fi
             docker exec -it ollama ollama pull deepseek-r1:1.5b
