@@ -1,0 +1,29 @@
+name: Deploy Chat Bot GUI in EC2
+
+on:
+  workflow_dispatch:  # manual trigger
+
+jobs:
+  Deploy_app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Find and kill any container using port 8080
+            CONTAINER_ID=$(docker ps --filter "publish=8080" --format "{{.ID}}")
+            if [ ! -z "$CONTAINER_ID" ]; then
+              docker stop $CONTAINER_ID
+              docker rm $CONTAINER_ID
+            fi
+            docker run -d --name ollama-chat \
+            -p 8080:8080 \
+            -e OLLAMA_BASE_URL=http://44.249.198.42:11434 \
+            -e MODEL=llama3.1 \
+            -e FLASK_SECRET_KEY="$(openssl rand -hex 16)" \
+            nageshupalanchi/ollama-chat-gui:latest
