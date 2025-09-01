@@ -17,6 +17,7 @@ jobs:
           script: |
             # Find and kill any container using port 8080
             CONTAINER_ID=$(docker ps --filter "publish=8080" --format "{{.ID}}")
+            echo $CONTAINER_ID
             if [ ! -z "$CONTAINER_ID" ]; then
               docker stop $CONTAINER_ID
               docker rm $CONTAINER_ID
