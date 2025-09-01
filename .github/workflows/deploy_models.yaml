@@ -21,4 +21,4 @@ jobs:
             #   docker stop $CONTAINER_ID
             #   docker rm $CONTAINER_ID
             # fi
-            docker exec -it ollama ollama pull deepseek-r1:1.5b
+            docker exec -t ollama ollama pull deepseek-r1:1.5b
