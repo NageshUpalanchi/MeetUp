@@ -25,6 +25,6 @@ jobs:
             docker run -d --name ollama-chat \
             -p 8080:8080 \
             -e OLLAMA_BASE_URL=http://44.249.198.42:11434 \
-            -e MODEL=llama3.1 \
+            -e MODEL=deepseek-r1:1.5b \
             -e FLASK_SECRET_KEY="$(openssl rand -hex 16)" \
             nageshupalanchi/ollama-chat-gui:latest
