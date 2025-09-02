@@ -1,7 +1,6 @@
 name: Basic deploy
 on:
-  push:
-    branches: [ main ]
+    workflow_dispatch:  # manual trigger
 
 jobs:
   Ollama-Deploy:
